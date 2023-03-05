@@ -8,11 +8,16 @@ const port = 4005;
 app.use(bodyParser.json());
 
 const microservicePorts = ["4000", "4001", "4002", "4003"];
+const events = [];
 
-app.get("/events", (req, res) => {});
+app.get("/events", (_, res) => {
+  res.send(events);
+});
 
 app.post("/events", (req, res) => {
   const event = req.body;
+
+  events.push(event);
 
   microservicePorts.forEach((port) => {
     axios.post(`http://localhost:${port}/events`, event);
