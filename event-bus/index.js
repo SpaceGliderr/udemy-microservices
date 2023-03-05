@@ -7,7 +7,9 @@ const port = 4005;
 // The body parser is used to appropriately parse content of the users JSON request to show properly in the req.body object
 app.use(bodyParser.json());
 
-const microservicePorts = ["4000", "4001", "4002"];
+const microservicePorts = ["4000", "4001", "4002", "4003"];
+
+app.get("/events", (req, res) => {});
 
 app.post("/events", (req, res) => {
   const event = req.body;
