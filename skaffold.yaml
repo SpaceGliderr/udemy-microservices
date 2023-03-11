@@ -1,0 +1,56 @@
+apiVersion: skaffold/v4beta2
+kind: Config
+manifests:
+  rawYaml: ["./infra/k8s/*"]
+build:
+  local: # Disable default behavior of pushing to Docker Hub
+    push: false
+  artifacts: # Telling skaffold that there are somethings inside the project to be maintained
+    - image: nilchyyy/udemy-client # Rebuilds the image when different files are changed
+      context: client # There will be a Pod that is running code out of this directory
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual: # When a change occurs to files in the context path, it will take all the files and update the files within the Pod
+          - src: "src/**/*.js" # Watch changes in JS files
+            dest: .
+    - image: nilchyyy/udemy-posts
+      context: posts
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: nilchyyy/udemy-comments
+      context: comments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: nilchyyy/udemy-query
+      context: query
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: nilchyyy/udemy-moderation
+      context: moderation
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
+    - image: nilchyyy/udemy-event-bus
+      context: event-bus
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "*.js"
+            dest: .
