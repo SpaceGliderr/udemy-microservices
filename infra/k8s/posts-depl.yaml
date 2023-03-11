@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posts-depl
+spec:
+  replicas: 1 # Number of Pods we want to created
+  selector: # A Deployment doesn't know which Pods to manage. The selector field tells the Deployment to look for the Pods with the specified label of `app = post` and manage them
+    matchLabels:
+      app: posts
+  template: # Specifies the exact configuration of the Pod that we want the Deployment to make
+    # Template is thought of as the configuration file for a Kubernetes Pod
+    metadata:
+      labels: # The labels used to be matched by the selector
+        app: posts
+    spec:
+      containers:
+        - name: posts
+          image: nilchyyy/udemy-posts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv
+spec:
+  type: ClusterIP
+  selector: # Needs to know what Pods to expose to external resources, supposed to match the template label in the deployment config file
+    app: posts
+  ports:
+    - name: posts # logging purposes
+      protocol: TCP
+      port: 4000 # The port used by the Service to receive information from external sources
+      targetPort: 4000 # The port used by the Pod within a node to receive information
